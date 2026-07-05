@@ -238,6 +238,26 @@ StringView SVMake(const char* data, size_t size)
     return sv;
 }
 
+size_t SVFind(const StringView* sv, const StringView* substr)
+{
+    if (sv == NULL
+        || sv->data == NULL
+        || substr == NULL
+        || substr->data == NULL
+        || sv->size < substr->size) { return SIZE_MAX; }
+
+    for (size_t i = 0; i <= sv->size - substr->size; i++)
+    {
+        if (sv->data[i] != substr->data[0]) { continue; }
+        if (memcmp(sv->data + i, substr->data, substr->size) == 0)
+        {
+            return i;
+        }
+    }
+
+    return SIZE_MAX;
+}
+
 int main()
 {
     // Tests
@@ -415,6 +435,16 @@ int main()
     Enforce(SVFindLastChar(&b, '.') == SIZE_MAX, "Test failed");
     Enforce(SVFindLastChar(&c, '.') == SIZE_MAX, "Test failed");
     Enforce(SVFindLastChar(&d, '.') == SIZE_MAX, "Test failed");
+
+    a = SV("Anirban Mistry");
+    b = SV("ist");
+    c = SV("try");
+    d = SV("IST");
+    e = SV("Ani");
+    Enforce(SVFind(&a, &b) == 9, "Test 1 failed");
+    Enforce(SVFind(&a, &c) == 11, "Test 2 failed");
+    Enforce(SVFind(&a, &d) == SIZE_MAX, "Test 3 failed");
+    Enforce(SVFind(&a, &e) == 0, "Test 4 failed");
 
     return 0;
 }

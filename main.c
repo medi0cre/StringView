@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -245,6 +246,7 @@ size_t SVFind(const StringView* sv, const StringView* substr)
         || substr == NULL
         || substr->data == NULL
         || sv->size < substr->size) { return SIZE_MAX; }
+    if (substr->size == 0) { return 0; }
 
     for (size_t i = 0; i <= sv->size - substr->size; i++)
     {
@@ -363,7 +365,7 @@ int main()
     Expected = SV("Anirban Mistry");
     Enforce(SVCompare(&Spaced, &Expected), "Test 33 failed");
     
-    StringView a, b, c, d, e, f;
+    StringView a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r;
 
     a = SV("Anirban Mistry");
     b = SV("Anirban Mis");
@@ -441,10 +443,12 @@ int main()
     c = SV("try");
     d = SV("IST");
     e = SV("Ani");
+    f = SV("");
     Enforce(SVFind(&a, &b) == 9, "Test 1 failed");
     Enforce(SVFind(&a, &c) == 11, "Test 2 failed");
     Enforce(SVFind(&a, &d) == SIZE_MAX, "Test 3 failed");
     Enforce(SVFind(&a, &e) == 0, "Test 4 failed");
+    Enforce(SVFind(&a, &f) == 0, "Test 4 failed");
 
     return 0;
 }

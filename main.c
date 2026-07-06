@@ -454,8 +454,19 @@ int main()
     Enforce(SVFind(&a, &e) == 0, "Test 4 failed");
     Enforce(SVFind(&a, &f) == 0, "Test 4 failed");
 
+    a = SV("       ");
+    SVTrim(&a);
+    Enforce(SVCompare(&a, &(StringView){ "", 0 }), "Test failed");
+
     a = SV("a:b:c:d:e");
     printf("This should print a, b, c, d, e\n\n");
+    while(SVTokenize(&a, &b, ':'))
+    {
+        printf("The token is "SV_FMT"\n", SV_ARGS(b));
+    }
+
+    a = SV("a::b");
+    printf("\n\nThis should print a, {blank line}, b\n\n");
     while(SVTokenize(&a, &b, ':'))
     {
         printf("The token is "SV_FMT"\n", SV_ARGS(b));

@@ -167,7 +167,7 @@ size_t SVFindLastChar(const StringView* sv, const char c)
 
 bool SVTokenize(StringView* sv, StringView* token, const char delim)
 {
-    if (sv == NULL || sv->data == NULL || token == NULL) { return false; }
+    if (sv == NULL || sv->data == NULL || token == NULL || sv->size == 0) { return false; }
 
     for (size_t i = 0; i < sv->size; i++)
     {
@@ -189,7 +189,7 @@ bool SVTokenize(StringView* sv, StringView* token, const char delim)
     sv->data += sv->size;
     sv->size = 0;
 
-    return false;
+    return true;
 }
 
 bool SVStartsWith(const StringView* sv, const StringView* prefix)
@@ -397,10 +397,14 @@ int main()
     d = SV("Patrick");
     Enforce(SVCompare(&b, &c), "Test failed");
     Enforce(SVCompare(&a, &d), "Test failed");
-    Enforce(SVTokenize(&a, &b, ' ') == false, "Test 1failed");
+    Enforce(SVTokenize(&a, &b, ' ') == true, "Test 1failed");
     c = SV("Patrick");
     d = SV("");
     Enforce(SVCompare(&b, &c), "Test 2failed");
+    Enforce(SVCompare(&a, &d), "Test 3failed");
+    Enforce(SVTokenize(&a, &b, ' ') == false, "Test 1failed");
+    c = SV("");
+    d = SV("");
     Enforce(SVCompare(&a, &d), "Test 3failed");
 
     a = SV("Anirban Mistry");
@@ -449,6 +453,13 @@ int main()
     Enforce(SVFind(&a, &d) == SIZE_MAX, "Test 3 failed");
     Enforce(SVFind(&a, &e) == 0, "Test 4 failed");
     Enforce(SVFind(&a, &f) == 0, "Test 4 failed");
+
+    a = SV("a:b:c:d:e");
+    printf("This should print a, b, c, d, e\n\n");
+    while(SVTokenize(&a, &b, ':'))
+    {
+        printf("The token is "SV_FMT"\n", SV_ARGS(b));
+    }
 
     return 0;
 }

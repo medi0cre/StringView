@@ -133,11 +133,101 @@ void TestSVSubString()
     printf("TestSVSubString() succeeded\n");
 }
 
+void TestSVTrimLeft()
+{
+    a = SV(NULL);
+    b = SV("");
+    c = SV("     ");
+    d = SV("   abc   def   ");
+    e = SV("");
+    f = SV("abc   def   ");
+    g = SV("abcdef");
+    h = SV("abcdef");
+
+    SVTrimLeft(&a);
+    SVTrimLeft(&b);
+    SVTrimLeft(&c);
+    SVTrimLeft(&d);
+    SVTrimLeft(&g);
+
+    Enforce(
+        a.data == NULL && a.size == 0
+        && SVCompare(&b, &e)
+        && SVCompare(&c, &e)
+        && SVCompare(&g, &h)
+        && SVCompare(&d, &f),
+        "TestSVTrimLeft failed"
+    );
+
+    printf("TestSVTrimLeft() succeeded\n");
+}
+
+void TestSVTrimRight()
+{
+    a = SV(NULL);
+    b = SV("");
+    c = SV("     ");
+    d = SV("   abc   def   ");
+    e = SV("");
+    f = SV("   abc   def");
+    g = SV("abcdef");
+    h = SV("abcdef");
+
+    SVTrimRight(&a);
+    SVTrimRight(&b);
+    SVTrimRight(&c);
+    SVTrimRight(&d);
+    SVTrimRight(&g);
+
+    Enforce(
+        a.data == NULL && a.size == 0
+        && SVCompare(&b, &e)
+        && SVCompare(&c, &e)
+        && SVCompare(&g, &h)
+        && SVCompare(&d, &f),
+        "TestSVTrimRight failed"
+    );
+
+    printf("TestSVTrimRight() succeeded\n");
+}
+
+void TestSVTrim()
+{
+    a = SV(NULL);
+    b = SV("");
+    c = SV("     ");
+    d = SV("   abc   def   ");
+    e = SV("");
+    f = SV("abc   def");
+    g = SV("abcdef");
+    h = SV("abcdef");
+
+    SVTrim(&a);
+    SVTrim(&b);
+    SVTrim(&c);
+    SVTrim(&d);
+    SVTrim(&g);
+
+    Enforce(
+        a.data == NULL && a.size == 0
+        && SVCompare(&b, &e)
+        && SVCompare(&c, &e)
+        && SVCompare(&g, &h)
+        && SVCompare(&d, &f),
+        "TestSVTrim failed"
+    );
+
+    printf("TestSVTrim() succeeded\n");
+}
+
 int main()
 {
     TestSV();
     TestSVToCString();
     TestSVCompare();
     TestSVSubString();
+    TestSVTrimLeft();
+    TestSVTrimRight();
+    TestSVTrim();
     return 0;
 }

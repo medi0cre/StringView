@@ -307,6 +307,52 @@ void TestSVChopRight()
     printf("TestSVChopRight() succeeded\n");
 }
 
+void TestSVFindFirstChar()
+{
+    a = SV(NULL);
+    b = SV("");
+    c = SV("  ab cd\ref\ng\thijklm \r z    ");
+
+    Enforce(
+        SVFindFirstChar(&a, 'a') == SIZE_MAX
+        && SVFindFirstChar(&a, ' ') == SIZE_MAX
+        && SVFindFirstChar(&b, ' ') == SIZE_MAX
+        && SVFindFirstChar(&b, 'z') == SIZE_MAX
+        && SVFindFirstChar(&c, 'q') == SIZE_MAX
+        && SVFindFirstChar(&c, ' ') == 0
+        && SVFindFirstChar(&c, 'a') == 2
+        && SVFindFirstChar(&c, '\r') == 7
+        && SVFindFirstChar(&c, '\t') == 12
+        && SVFindFirstChar(&c, 'z') == 22,
+        "TestSVFindFirstChar() failed"
+    );
+
+    printf("TestSVFindFirstChar() succeeded\n");
+}
+
+void TestSVFindLastChar()
+{
+    a = SV(NULL);
+    b = SV("");
+    c = SV("  ab cd\ref\ng\thijklm \r z    ");
+
+    Enforce(
+        SVFindLastChar(&a, 'a') == SIZE_MAX
+        && SVFindLastChar(&a, ' ') == SIZE_MAX
+        && SVFindLastChar(&b, ' ') == SIZE_MAX
+        && SVFindLastChar(&b, 'z') == SIZE_MAX
+        && SVFindLastChar(&c, 'q') == SIZE_MAX
+        && SVFindLastChar(&c, ' ') == 26
+        && SVFindLastChar(&c, 'z') == 22
+        && SVFindLastChar(&c, '\r') == 20
+        && SVFindLastChar(&c, '\t') == 12
+        && SVFindLastChar(&c, 'a') == 2,
+        "TestSVFindLastChar() failed"
+    );
+
+    printf("TestSVFindLastChar() succeeded\n");
+}
+
 int main()
 {
     TestSV();
@@ -318,5 +364,7 @@ int main()
     TestSVTrim();
     TestSVChopLeft();
     TestSVChopRight();
+    TestSVFindFirstChar();
+    TestSVFindLastChar();
     return 0;
 }

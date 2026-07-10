@@ -220,6 +220,70 @@ void TestSVTrim()
     printf("TestSVTrim() succeeded\n");
 }
 
+void TestSVChopLeft()
+{
+    a = SV(NULL);
+    b = SV("");
+    c = SV("abcdef");
+    d = SV("abcdef");
+    e = SV("abcdef");
+    f = SV("");
+    g = SV("abcdef");
+    h = SV("def");
+    i = SV("abcdef");
+    
+    SVChopLeft(&a, 0);
+    SVChopLeft(&b, 5);
+    SVChopLeft(&c, 0);
+    SVChopLeft(&d, 3);
+    SVChopLeft(&e, 6);
+    SVChopLeft(&i, 7);
+
+    Enforce(
+        a.data == NULL && a.size == 0
+        && SVCompare(&b, &f)
+        && SVCompare(&c, &g)
+        && SVCompare(&d, &h)
+        && SVCompare(&e, &f)
+        && SVCompare(&i, &f),
+        "TestSVChopLeft() failed"
+    );
+
+    printf("TestSVChopLeft() succeeded\n");
+}
+
+void TestSVChopRight()
+{
+    a = SV(NULL);
+    b = SV("");
+    c = SV("abcdef");
+    d = SV("abcdef");
+    e = SV("abcdef");
+    f = SV("");
+    g = SV("abcdef");
+    h = SV("abc");
+    i = SV("abcdef");
+    
+    SVChopRight(&a, 0);
+    SVChopRight(&b, 5);
+    SVChopRight(&c, 0);
+    SVChopRight(&d, 3);
+    SVChopRight(&e, 6);
+    SVChopRight(&i, 7);
+
+    Enforce(
+        a.data == NULL && a.size == 0
+        && SVCompare(&b, &f)
+        && SVCompare(&c, &g)
+        && SVCompare(&d, &h)
+        && SVCompare(&e, &f)
+        && SVCompare(&i, &f),
+        "TestSVChopRight() failed"
+    );
+
+    printf("TestSVChopRight() succeeded\n");
+}
+
 int main()
 {
     TestSV();
@@ -229,5 +293,7 @@ int main()
     TestSVTrimLeft();
     TestSVTrimRight();
     TestSVTrim();
+    TestSVChopLeft();
+    TestSVChopRight();
     return 0;
 }

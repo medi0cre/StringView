@@ -247,6 +247,8 @@ bool SVConsume(StringView* sv, const StringView* prefix)
 StringView SVMake(const char* data, size_t size)
 {
     StringView sv = { 0 };
+    if (data == NULL) { return sv; }
+
     sv.data = data;
     sv.size = size;
     return sv;

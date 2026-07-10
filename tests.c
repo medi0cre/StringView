@@ -42,11 +42,17 @@ void TestSVToCString()
     char buf1[1];
     char buf3[3];
     char buf4[4];
-
-    Enforce(
+	char b4[4];
+	
+	SVToCString(&c, b4, sizeof(b4));
+    
+	Enforce(
         SVToCString(&a, buf1, sizeof(buf1)) == false
         && SVToCString(&b, buf1, sizeof(buf1)) == true
+		&& SVToCString(&c, NULL, 4) == false
+		&& SVToCString(NULL, buf4, sizeof(buf4)) == false
         && SVToCString(&c, buf3, sizeof(buf3)) == false
+		&& strcmp(b4, "abc") == 0
         && SVToCString(&c, buf4, sizeof(buf4)) == true,
         "TestSVToCString() failed"
     );
@@ -72,6 +78,9 @@ void TestSVCompare()
         && SVCompare(&c, &c)
         && SVCompare(&c, &d)
         && !SVCompare(&c, &e)
+        && !SVCompare(NULL, &b)
+        && !SVCompare(&b, NULL)
+        && !SVCompare(NULL, NULL)
         && !SVCompare(&c, &f),
         "TestSVCompare() failed"
     );
@@ -143,18 +152,22 @@ void TestSVTrimLeft()
     f = SV("abc   def   ");
     g = SV("abcdef");
     h = SV("abcdef");
+    i = SV("\r\n\t abc\r\n\t def\r\n\t ");
+    j = SV("abc\r\n\t def\r\n\t ");
 
     SVTrimLeft(&a);
     SVTrimLeft(&b);
     SVTrimLeft(&c);
     SVTrimLeft(&d);
     SVTrimLeft(&g);
+    SVTrimLeft(&i);
 
     Enforce(
         a.data == NULL && a.size == 0
         && SVCompare(&b, &e)
         && SVCompare(&c, &e)
         && SVCompare(&g, &h)
+        && SVCompare(&i, &j)
         && SVCompare(&d, &f),
         "TestSVTrimLeft failed"
     );
@@ -172,18 +185,22 @@ void TestSVTrimRight()
     f = SV("   abc   def");
     g = SV("abcdef");
     h = SV("abcdef");
+    i = SV("\r\n\t abc\r\n\t def\r\n\t ");
+    j = SV("\r\n\t abc\r\n\t def");
 
     SVTrimRight(&a);
     SVTrimRight(&b);
     SVTrimRight(&c);
     SVTrimRight(&d);
     SVTrimRight(&g);
+    SVTrimRight(&i);
 
     Enforce(
         a.data == NULL && a.size == 0
         && SVCompare(&b, &e)
         && SVCompare(&c, &e)
         && SVCompare(&g, &h)
+        && SVCompare(&i, &j)
         && SVCompare(&d, &f),
         "TestSVTrimRight failed"
     );
@@ -201,18 +218,22 @@ void TestSVTrim()
     f = SV("abc   def");
     g = SV("abcdef");
     h = SV("abcdef");
+    i = SV("\r\n\t abc\r\n\t def\r\n\t ");
+    j = SV("abc\r\n\t def");
 
     SVTrim(&a);
     SVTrim(&b);
     SVTrim(&c);
     SVTrim(&d);
     SVTrim(&g);
+    SVTrim(&i);
 
     Enforce(
         a.data == NULL && a.size == 0
         && SVCompare(&b, &e)
         && SVCompare(&c, &e)
         && SVCompare(&g, &h)
+        && SVCompare(&i, &j)
         && SVCompare(&d, &f),
         "TestSVTrim failed"
     );
@@ -238,6 +259,7 @@ void TestSVChopLeft()
     SVChopLeft(&d, 3);
     SVChopLeft(&e, 6);
     SVChopLeft(&i, 7);
+    SVChopLeft(NULL, 5);
 
     Enforce(
         a.data == NULL && a.size == 0
@@ -270,6 +292,7 @@ void TestSVChopRight()
     SVChopRight(&d, 3);
     SVChopRight(&e, 6);
     SVChopRight(&i, 7);
+    SVChopRight(NULL, 5);
 
     Enforce(
         a.data == NULL && a.size == 0

@@ -353,6 +353,44 @@ void TestSVFindLastChar()
     printf("TestSVFindLastChar() succeeded\n");
 }
 
+void TestSVMake()
+{
+    char aa[] = { 0 };
+    char bb[] = { '\0' };
+    char cc[] = { 'a', 'b', 'c' };
+    char dd[] = { '\0', 'a', 'b', 'c' };
+    char ee[] = { 'a', 'b', '\0', 'c' };
+    char ff[] = { 'a', 'b', 'c', '\0' };
+    char gg[] = { 'a', 'b', 'c', 'd', 'e' }; 
+
+    a = SVMake(aa, sizeof(aa));
+    b = SVMake(bb, sizeof(bb));
+    c = SVMake(cc, sizeof(cc));
+    d = SVMake(dd, sizeof(dd));
+    e = SVMake(ee, sizeof(ee));
+    f = SVMake(ff, sizeof(ff));
+    g = SVMake(NULL, 0);
+    h = SVMake(NULL, 1);
+    i = SVMake(cc, 0);
+    j = SVMake(gg + 2, 2);
+
+    Enforce(
+        a.data != NULL && a.size == 1
+        && b.data != NULL && b.size == 1
+        && memcmp(c.data, "abc", 3) == 0 && c.size == 3
+        && memcmp(d.data, "\0abc", 4) == 0 && d.size == 4
+        && memcmp(e.data, "ab\0c", 4) == 0 && e.size == 4
+        && g.data == NULL && g.size == 0
+        && h.data == NULL && h.size == 0
+        && i.data == cc && i.size == 0
+        && j.data == gg + 2 && j.size == 2 && memcmp(j.data, "cd", 2) == 0
+        && memcmp(f.data, "abc\0", 4) == 0 && f.size == 4,
+        "TestSVMake() failed"
+    );
+
+    printf("TestSVMake() succeeded");
+}
+
 int main()
 {
     TestSV();
@@ -366,5 +404,6 @@ int main()
     TestSVChopRight();
     TestSVFindFirstChar();
     TestSVFindLastChar();
+    TestSVMake();
     return 0;
 }

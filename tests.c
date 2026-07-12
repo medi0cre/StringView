@@ -388,7 +388,62 @@ void TestSVMake()
         "TestSVMake() failed"
     );
 
-    printf("TestSVMake() succeeded");
+    printf("TestSVMake() succeeded\n");
+}
+
+void TestSVStartsWith()
+{
+    a = SV(NULL);
+    b = SV("");
+    c = SV("abcde");
+    d = SV("a");
+    e = SV("abc");
+    f = SV("abcde");
+
+    Enforce(
+        !SVStartsWith(&a, &a)
+        && !SVStartsWith(&a, &b)
+        && !SVStartsWith(&a, &d)
+        && !SVStartsWith(&b, &a)
+        && SVStartsWith(&b, &b)
+        && !SVStartsWith(&b, &d)
+        && !SVStartsWith(&c, &a)
+        && SVStartsWith(&c, &b)
+        && SVStartsWith(&c, &d)
+        && SVStartsWith(&c, &e)
+        && SVStartsWith(&c, &f)
+        , "TestSVStartsWith() failed"
+    );
+
+    printf("TestSVStartsWith() succeeded\n");
+}
+
+void TestSVEndsWith()
+{
+    a = SV(NULL);
+    b = SV("");
+    c = SV("abcde");
+    d = SV("e");
+    e = SV("cde");
+    f = SV("abcde");
+
+    Enforce(
+        !SVEndsWith(&a, &a)
+        && !SVEndsWith(&a, &b)
+        && !SVEndsWith(&a, &d)
+        && !SVEndsWith(&b, &a)
+        && SVEndsWith(&b, &b)
+        && !SVEndsWith(&b, &d)
+        && !SVEndsWith(&c, &a)
+        && SVEndsWith(&c, &b)
+        && SVEndsWith(&c, &d)
+        && SVEndsWith(&c, &e)
+        && SVEndsWith(&c, &f)
+        , "TestSVEndsWith() failed"
+    );
+
+    printf("TestSVEndsWith() succeeded\n");
+
 }
 
 int main()
@@ -405,5 +460,7 @@ int main()
     TestSVFindFirstChar();
     TestSVFindLastChar();
     TestSVMake();
+    TestSVStartsWith();
+    TestSVEndsWith();
     return 0;
 }

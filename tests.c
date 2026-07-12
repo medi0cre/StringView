@@ -461,6 +461,13 @@ void TestSVFind()
     l = SV("cde");
     m = SV("z");
     n = SV("def");
+    o = SV("aaaaa");
+    p = SV("aa");
+    s = SV("e");
+
+    char buf[] = { 'a', '\0', 'b', '\0', 'c' };
+    q = SVMake(buf, sizeof(buf));
+    r = SVMake(buf + 1, 2);
 
     Enforce(
         SVFind(&a, &a) == SIZE_MAX
@@ -476,6 +483,9 @@ void TestSVFind()
         && SVFind(&c, &j) == 2 && SVFind(&c, &k) == 2 && SVFind(&c, &l) == 2
         && SVFind(&c, &m) == SIZE_MAX
         && SVFind(&c, &n) == SIZE_MAX
+        && SVFind(&o, &p) == 0
+        && SVFind(&q, &r) == 1
+        && SVFind(&c, &s) == 4
         , "TestSVFind() failed"
     );
 

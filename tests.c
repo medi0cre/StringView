@@ -443,7 +443,43 @@ void TestSVEndsWith()
     );
 
     printf("TestSVEndsWith() succeeded\n");
+}
 
+void TestSVFind()
+{
+    a = SV(NULL);
+    b = SV("");
+    c = SV("abcde");
+    d = SV("a");
+    e = SV("abc");
+    f = SV("abcde");
+    g = SV("bc");
+    h = SV("bcd");
+    i = SV("bcde");
+    j = SV("c");
+    k = SV("cd");
+    l = SV("cde");
+    m = SV("z");
+    n = SV("def");
+
+    Enforce(
+        SVFind(&a, &a) == SIZE_MAX
+        && SVFind(&a, &b) == SIZE_MAX
+        && SVFind(&a, &c) == SIZE_MAX
+        && SVFind(&b, &a) == SIZE_MAX
+        && SVFind(&b, &b) == 0
+        && SVFind(&b, &c) == SIZE_MAX
+        && SVFind(&c, &a) == SIZE_MAX
+        && SVFind(&c, &b) == 0
+        && SVFind(&c, &d) == 0 && SVFind(&c, &e) == 0 && SVFind(&c, &f) == 0
+        && SVFind(&c, &g) == 1 && SVFind(&c, &h) == 1 && SVFind(&c, &i) == 1
+        && SVFind(&c, &j) == 2 && SVFind(&c, &k) == 2 && SVFind(&c, &l) == 2
+        && SVFind(&c, &m) == SIZE_MAX
+        && SVFind(&c, &n) == SIZE_MAX
+        , "TestSVFind() failed"
+    );
+
+    printf("TestSVFind() succeeded\n");
 }
 
 int main()
@@ -462,5 +498,6 @@ int main()
     TestSVMake();
     TestSVStartsWith();
     TestSVEndsWith();
+    TestSVFind();
     return 0;
 }

@@ -525,6 +525,46 @@ void TestSVSplitByDelimiter()
     printf("TestSVSplitByDelimiter() succeeded\n");
 }
 
+void TestSVConsume()
+{
+    a = SV(NULL);
+    b = SV("");
+    c = SV("abcde");
+    d = SV("abcde");
+    e = SV("a");
+    f = SV("bcde");
+    g = SV("ab");
+    h = SV("cde");
+    i = SV("abcde");
+    j = SV("abc");
+    k = SV("de");
+    l = SV("abcde");
+    m = SV("abcd");
+    n = SV("e");
+    o = SV("abcde");
+    p = SV("abcde");
+    q = SV("bcde");
+    r = SV("z");
+
+    Enforce(
+        !SVConsume(&a, &a)
+        && !SVConsume(&b, &a)
+        && !SVConsume(&c, &a)
+        && SVConsume(&b, &b)
+        && SVConsume(&c, &b) && SVCompare(&c, &d)
+        && SVConsume(&c, &e) && SVCompare(&c, &f)
+        && SVConsume(&d, &g) && SVCompare(&d, &h)
+        && SVConsume(&i, &j) && SVCompare(&i, &k)
+        && SVConsume(&l, &m) && SVCompare(&l, &n)
+        && SVConsume(&o, &o) && SVCompare(&o, &b)
+        && !SVConsume(&p, &q)
+        && !SVConsume(&p, &r)
+        , "TestSVConsume() failed"
+    );
+
+    printf("TestSVConsume() succeeded\n");
+}
+
 int main()
 {
     TestSV();
@@ -543,5 +583,6 @@ int main()
     TestSVEndsWith();
     TestSVFind();
     TestSVSplitByDelimiter();
+    TestSVConsume();
     return 0;
 }

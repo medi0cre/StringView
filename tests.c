@@ -492,6 +492,39 @@ void TestSVFind()
     printf("TestSVFind() succeeded\n");
 }
 
+void TestSVSplitByDelimiter()
+{
+    a = SV(NULL);
+    b = SV("");
+    c = SV("abcde");
+    f = SV("");
+    g = SV("bcde");
+    h = SV("a");
+    i = SV("cde");
+    j = SV("ab");
+    k = SV("de");
+    l = SV("abc");
+    m = SV("e");
+    n = SV("abcd");
+    o = SV("");
+
+    Enforce(
+        !SVSplitByDelimiter(&a, ' ', &d, &e)
+        && !SVSplitByDelimiter(&b, 'a', &d, &e)
+        && !SVSplitByDelimiter(&b, '\0', &d, &e)
+        && !SVSplitByDelimiter(&b, '\n', &d, &e)
+        && !SVSplitByDelimiter(&c, '\0', &d, &e)
+        && SVSplitByDelimiter(&c, 'a', &d, &e) && SVCompare(&d, &f) && SVCompare(&e, &g)
+        && SVSplitByDelimiter(&c, 'b', &d, &e) && SVCompare(&d, &h) && SVCompare(&e, &i)
+        && SVSplitByDelimiter(&c, 'c', &d, &e) && SVCompare(&d, &j) && SVCompare(&e, &k)
+        && SVSplitByDelimiter(&c, 'd', &d, &e) && SVCompare(&d, &l) && SVCompare(&e, &m)
+        && SVSplitByDelimiter(&c, 'e', &d, &e) && SVCompare(&d, &n) && SVCompare(&e, &o)
+        , "TestSVSplitByDelimiter() failed"
+    );
+
+    printf("TestSVSplitByDelimiter() succeeded\n");
+}
+
 int main()
 {
     TestSV();
@@ -509,5 +542,6 @@ int main()
     TestSVStartsWith();
     TestSVEndsWith();
     TestSVFind();
+    TestSVSplitByDelimiter();
     return 0;
 }

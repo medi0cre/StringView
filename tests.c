@@ -565,6 +565,39 @@ void TestSVConsume()
     printf("TestSVConsume() succeeded\n");
 }
 
+void TestSVTokenize()
+{
+    a = SV(NULL);
+    b = SV("");
+    c = SV("abcdef");
+    f = SV("abcdef");
+    g = SV("abcdef");
+    h = SV("abcdef");
+
+    Enforce(
+        !SVTokenize(&a, &e, ' ')
+        && !SVTokenize(&b, &e, ' ')
+        && !SVTokenize(&b, &e, ':')
+        && SVTokenize(&c, &e, ':') && SVCompare(&c, &b) && SVCompare(&e, &(StringView){ "abcdef", 6 })
+        && SVTokenize(&f, &e, 'a') && SVCompare(&f, &(StringView){ "bcdef", 5 }) && SVCompare(&e, &(StringView){ "", 0 })
+        && SVTokenize(&g, &e, 'd') && SVCompare(&g, &(StringView){ "ef", 2 }) && SVCompare(&e, &(StringView){ "abc", 3 })
+        && SVTokenize(&h, &e, 'f') && SVCompare(&h, &(StringView){ "", 0 }) && SVCompare(&e, &(StringView){ "abcde", 5 })
+        , "TestSVTokenize() failed\n"
+    );
+
+    a = SV("a:::b");
+
+    Enforce(
+        SVTokenize(&a, &z, ':') && SVCompare(&a, &(StringView){ "::b", 3 }) && SVCompare(&z, &(StringView){ "a", 1 })
+        && SVTokenize(&a, &z, ':') && SVCompare(&a, &(StringView){ ":b", 2 }) && SVCompare(&z, &(StringView){ "", 0 })
+        && SVTokenize(&a, &z, ':') && SVCompare(&a, &(StringView){ "b", 1 }) && SVCompare(&z, &(StringView){ "", 0 })
+        && SVTokenize(&a, &z, ':') && SVCompare(&a, &(StringView){ "", 0 }) && SVCompare(&z, &(StringView){ "b", 1 })
+        , "TestSVTokenize() failed\n"
+    );
+
+    printf("TestSVTokenize() succeeded\n");
+}
+
 int main()
 {
     TestSV();
@@ -584,5 +617,6 @@ int main()
     TestSVFind();
     TestSVSplitByDelimiter();
     TestSVConsume();
+    TestSVTokenize();
     return 0;
 }

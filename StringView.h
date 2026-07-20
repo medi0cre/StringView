@@ -6,7 +6,7 @@
 
 #define SV_FMT "%.*s"
 #define SV_ARGS(sv) (int)(sv).size, (sv).data
-#define SV_ADDR(sv) &(StringView) { (sv), strlen(sv) }
+#define SV_ADDR(sv) &(StringView) { (sv), sizeof(sv) - 1 }
 
 typedef struct StringView
 {
